@@ -36,6 +36,61 @@ require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-e
             return usedNumbers.length + 1;
         }
 
+const settings = {
+    alwaysOnTop: true,
+    autoAttach: false,
+    showTerminal: true,
+    minimap: false,
+    autocomplete: true,
+    scriptSearch: true,
+    loadImages: true,
+    allowExecute: true,
+    allowCopy: true
+};
+
+function loadSettings() {
+    const saved = localStorage.getItem("executor_settings");
+
+    if (saved) {
+        Object.assign(settings, JSON.parse(saved));
+    }
+
+    document.querySelectorAll("[data-setting]").forEach(el => {
+        const key = el.dataset.setting;
+
+        if (settings[key] !== undefined) {
+            el.checked = settings[key];
+        }
+
+        el.addEventListener("change", () => {
+            settings[key] = el.checked;
+
+            saveSettings();
+
+            sendSettingToCSharp(key, el.checked);
+        });
+    });
+}
+
+function saveSettings() {
+    localStorage.setItem(
+        "executor_settings",
+        JSON.stringify(settings)
+    );
+}
+
+function sendSettingToCSharp(name, value) {
+    if (window.chrome?.webview) {
+        window.chrome.webview.postMessage({
+            type: "setting",
+            name,
+            value
+        });
+    }
+}
+
+loadSettings();
+
         function updateMonacoTheme() {
             if (typeof monaco === 'undefined' || typeof monaco.editor === 'undefined') return;
 
