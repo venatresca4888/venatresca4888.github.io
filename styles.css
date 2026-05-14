@@ -9,6 +9,9 @@
     --secondary-bg: #1e1e1e;   
     --secondary-text: #767676;
     --pressed-color: #4A4A4A; 
+    --scrollbar-track: #1e1e1e;
+    --scrollbar-thumb: #2a2a2a;
+    --scrollbar-thumb-hover: #3a3a3a;
 }
 
         html.theme-light {
@@ -68,6 +71,27 @@
 
         * {
             box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        *::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border: 2px solid var(--scrollbar-track);
+            border-radius: 999px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-thumb-hover);
         }
 
         html, body {
@@ -100,10 +124,11 @@
             align-items: center;
             justify-content: center;
             gap: 22px;
-            padding: 0 16px;
+            padding: 0 116px 0 16px;
             background: var(--bg-color);
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
+            position: relative;
         }
 
         .page-tab {
@@ -145,6 +170,47 @@
         .page-tab.active {
             color: #d6aa38;
             border-bottom-color: var(--accent-color);
+        }
+
+        .window-controls {
+            position: absolute;
+            top: 0;
+            right: 8px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .window-control {
+            width: 34px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 5px;
+            background: transparent;
+            color: var(--secondary-text);
+            cursor: pointer;
+            transition: color 0.16s ease, background-color 0.16s ease;
+        }
+
+        .window-control svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            pointer-events: none;
+        }
+
+        .window-control:hover {
+            color: var(--text-color);
+            background: var(--hover-color);
+        }
+
+        .window-control.close:hover {
+            color: #fff;
+            background: #c42b1c;
         }
 
         .page {
@@ -441,7 +507,7 @@
             white-space: nowrap;
             transition: border-color 0.3s ease;
             scrollbar-width: thin;
-            scrollbar-color: var(--secondary-text) var(--secondary-bg);
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
 
         #tab-bar::-webkit-scrollbar {
@@ -449,19 +515,19 @@
         }
 
         #tab-bar::-webkit-scrollbar-track {
-            background: var(--secondary-bg);
+            background: var(--scrollbar-track);
             border-radius: 3px;
         }
 
         #tab-bar::-webkit-scrollbar-thumb {
-            background: var(--secondary-text);
+            background: var(--scrollbar-thumb);
             border-radius: 3px;
             min-width: 24px;
             transition: background 0.2s ease;
         }
 
         #tab-bar::-webkit-scrollbar-thumb:hover {
-            background: var(--text-color);
+            background: var(--scrollbar-thumb-hover);
         }
 
         .tab {
