@@ -158,6 +158,29 @@ require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-e
             });
         }
 
+        function setupWindowControls() {
+            document.querySelectorAll('[data-window-action]').forEach(button => {
+                button.addEventListener('click', () => handleWindowAction(button.dataset.windowAction));
+            });
+        }
+
+        function handleWindowAction(action) {
+            postHostMessage('windowControl', { action });
+
+            if (action === 'maximize') {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen?.().catch(() => {});
+                } else {
+                    document.exitFullscreen?.().catch(() => {});
+                }
+                return;
+            }
+
+            if (action === 'close') {
+                window.close();
+            }
+        }
+
         function loadSettings() {
             try {
                 return { ...defaultSettings, ...JSON.parse(localStorage.getItem('appSettings') || '{}') };
@@ -834,6 +857,7 @@ require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-e
 
                 document.getElementById('new-tab-btn').addEventListener('click', createNewTab);
                 setupPageTabs();
+                setupWindowControls();
                 setupSettingsControls();
                 
                 const searchInput = document.getElementById('script-search');
